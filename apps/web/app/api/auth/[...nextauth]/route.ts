@@ -16,6 +16,24 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, account }) {
+      if (account) {
+        token = Object.assign({}, token, {
+          access_token: account.access_token,
+        });
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session) {
+        session = Object.assign({}, session, {
+          access_token: token.access_token,
+        });
+      }
+      return session;
+    },
+  },
   session: { strategy: 'jwt' },
 };
 
